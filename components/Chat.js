@@ -1,6 +1,6 @@
-import { StyleSheet, View, Text } from 'react-native';
-import { useEffect } from 'react';
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
+import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Bubble, GiftedChat, Day } from "react-native-gifted-chat";
 
 const Chat = ({ route, navigation }) => {
   const { name, color } = route.params;
@@ -15,7 +15,7 @@ const Chat = ({ route, navigation }) => {
     setMessage([
       {
         _id: 1,
-        text: 'Hello There!',
+        text: 'Hello there!',
         createdAt: new Date(),
         user: {
           _id: 2,
@@ -30,17 +30,17 @@ const Chat = ({ route, navigation }) => {
         system: true,
       },
     ]);
-    navigation.setOptions({ title: name });
+
   }, 
   []);
 
-  //renders color for the bubbles on the chat 
+  //color for chat bubbles
   const renderBubble = (props) => {
     return <Bubble
     {...props}
     wrapperStyle={{
       right: {
-        backgroundColor: '#000'
+        backgroundColor: '#333333'
       },
       left: {
         backgroundColor: '#FFF'
@@ -49,19 +49,29 @@ const Chat = ({ route, navigation }) => {
     />
   }
 
+  //text color for date 
+  const renderDay = (props) => {
+    return <Day 
+    {...props}
+    textStyle={{
+      color: '#000'
+    }}
+    />
+  }
+
+
  return (
   <View style={[styles.container, {backgroundColor: color}]}>
-    <Text>Hello {name}!</Text>
   <GiftedChat
     messages={messages}
     renderBubble={renderBubble}
-    onSend={messages => onSend(messages)}
+    onSend={messages => onSend(messages)} 
     user={{
-      _id: 1
+      _id: 1,
     }}
+    renderDay={renderDay}
     />
      {/*incase keyboard hides input message */ }
-    { Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null }
     </View>
  )
 }
@@ -69,9 +79,8 @@ const Chat = ({ route, navigation }) => {
 const styles = StyleSheet.create({
  container: {
    flex: 1,
-   justifyContent: 'center',
-   alignItems: 'center'
- }
+   color: '#FFF'
+ }, 
 });
 
 export default Chat;
