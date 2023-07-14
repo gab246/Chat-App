@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Bubble, GiftedChat, Day } from "react-native-gifted-chat";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
 
 const Chat = ({ route, navigation, db }) => {
 
