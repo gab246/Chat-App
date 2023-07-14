@@ -1,9 +1,29 @@
 import { StyleSheet, View, Text, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 import { useState } from 'react';
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState('')
   const [color, setColor] = useState('')
+
+  //returns authentication handle of firebase
+  const auth = getAuth();
+
+  //returns promise - hence .then and .catch are used
+  const signInUser = () => {
+    signInAnonymously(auth)
+      .then(result => {
+        navigation.navigate('Chat', {
+          userID: result.user.uid,
+          name: name,
+          color: color
+     });
+        Alert.alert("Time to chit chat !");
+      })
+      .catch((error) => {
+        Alert.alert("Opps! Unable to sign in, try later again.");
+      })
+  }
 
  return (
   <ImageBackground
@@ -43,9 +63,7 @@ const Start = ({ navigation }) => {
           
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Chat', { 
-              name: name,
-              color: color})}
+            onPress={signInUser}
             style={styles.chatButton}>
               <Text style={styles.chatButton}>Start Chit Chatting</Text>
             </TouchableOpacity>
