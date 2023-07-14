@@ -1,38 +1,42 @@
 import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Bubble, GiftedChat, Day } from "react-native-gifted-chat";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
-  const { name, color } = route.params;
-  const [ messages, setMessage ] = useState([]);
+const Chat = ({ route, navigation, db }) => {
 
+  const { name, color, uid } = route.params;
+  const [ messages, setMessages ] = useState([]);
+
+  
+  useEffect(() => {
+    navigation.setOptions({ title: name });
+    const query = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+    const unsubMessages = onSnapshot(q, (docs) => {
+      let newMessages = [];
+      docs.forEach(doc => {
+        newMessages.push({ 
+          id: doc.id, 
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis())
+        })
+      })
+      setMessages(newMessages);
+    })
+    return () => {
+      if (unsubMessages) unsubMessages();
+  }
+}, []);
+
+
+  
   //callback function. previous and new messages on chat
   const onSend = (newMessage) => {
-    setMessage(previousMessages =>GiftedChat.append(previousMessages, newMessage))
-  }
+    const newMessageRef = addDoc(collection(db, "messages"), newMessage[0])
+    
+    }
+  
 
-  useEffect(() => {
-    setMessage([
-      {
-        _id: 1,
-        text: 'Hello there!',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'Bob',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-      {
-        _id: 2,
-        text: 'You have entered the chat',
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
-
-  }, 
-  []);
 
   //color for chat bubbles
   const renderBubble = (props) => {
@@ -67,11 +71,12 @@ const Chat = ({ route, navigation }) => {
     renderBubble={renderBubble}
     onSend={messages => onSend(messages)} 
     user={{
-      _id: 1,
+      _id: uid,
     }}
     renderDay={renderDay}
     />
      {/*incase keyboard hides input message */ }
+    {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
     </View>
  )
 }
