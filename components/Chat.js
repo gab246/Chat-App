@@ -32,7 +32,7 @@ const Chat = ({ route, navigation, db }) => {
   
   //callback function. previous and new messages on chat
   const onSend = (newMessage) => {
-    const newMessageRef = addDoc(collection(db, "messages"), newMessage[0])
+    addDoc(collection(db, "messages"), newMessage[0])
     
     }
   
