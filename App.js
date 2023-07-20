@@ -1,7 +1,9 @@
 //react navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+
+import Start from "./components/Start"
+import Chat from "./components/chat"
 
 //create navigator 
 const Stack = createNativeStackNavigator();
@@ -9,25 +11,26 @@ const Stack = createNativeStackNavigator();
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-//import screens
-import Start from './components/Start';
-import Chat from './components/Chat';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+
+
 
 const App = () => {
   const firebaseConfig = {
-    apiKey: "AIzaSyBC4KuSMqboZsx_spI_192LoVlMVzif0JU",
-    authDomain: "chat-app-28a30.firebaseapp.com",
-    projectId: "chat-app-28a30",
-    storageBucket: "chat-app-28a30.appspot.com",
-    messagingSenderId: "665783359835",
-    appId: "1:665783359835:web:7843c793e3240002b5a27e"
+    apiKey: "AIzaSyArTIqT_HkdoHVHpBfm4865qHlamNg2RHs",
+    authDomain: "chat-app2-a9104.firebaseapp.com",
+    projectId: "chat-app2-a9104",
+    storageBucket: "chat-app2-a9104.appspot.com",
+    messagingSenderId: "904969986062",
+    appId: "1:904969986062:web:f47a066cd38851cac5dc5f"
   };
- 
+
 
   //initialises Firebase 
   const app = initializeApp(firebaseConfig);
   //initialises Cloud Firestire, gets reference to service 
   const db = getFirestore(app);
+  
 
   return (
     <NavigationContainer style={styles.container}>
@@ -42,7 +45,7 @@ const App = () => {
         name='Chat'
         component={Chat}
         />
-        {props => <Chat db={db} {...props} />}
+        {props => <Chat db={db} {...props} />} 
       </Stack.Navigator>
     </NavigationContainer>
   );
