@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, KeyboardAvoidingView } from "react-native";
 import { useEffect, useState } from "react";
 import { Bubble, GiftedChat, Day } from "react-native-gifted-chat";
+import { Platform } from "react-native";
 import {
   collection,
   addDoc,
