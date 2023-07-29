@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, KeyboardAvoidingView } from "react-native";
 import { useEffect, useState } from "react";
-import { Bubble, GiftedChat, Day } from "react-native-gifted-chat";
-import { Platform } from "react-native";
+import { Bubble, GiftedChat, Day, InputToolbar } from "react-native-gifted-chat";
+import { Platform, Alert } from "react-native";
 import {
   collection,
   addDoc,
@@ -9,14 +9,24 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+//when user is offline, fetch and display data from AsyncStorage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Chat = ({ route, navigation, db }) => {
+
+const Chat = ({ route, navigation, db, isConnected }) => {
   const { name, color, userID } = route.params;
   const [messages, setMessages] = useState([]);
+  
+  let unsubMessages;
 
   useEffect(() => {
     navigation.setOptions({ title: name });
-    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    if (isConnected === true) {
+
+    if (unsubMessages) unsubMessages();
+    // unsubMessages = null;
+
+    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
     const unsubMessages = onSnapshot(q, (docs) => {
       let newMessages = [];
       docs.forEach((doc) => {
@@ -27,17 +37,50 @@ const Chat = ({ route, navigation, db }) => {
         });
       });
       // console.log(newMessages);
+      cacheChat(newMessages)
       setMessages(newMessages);
     });
+  } else loadCachedMessages();
+
     return () => {
       if (unsubMessages) unsubMessages();
     };
-  }, []);
+    //component to call the callback of useEffective whenever isConnected prop value changes
+  }, [isConnected]);
 
-  //callback function. previous and new messages on chat
-  const onSend = (newMessage) => {
-    addDoc(collection(db, "messages"), newMessage[0]);
-  };
+
+
+const cacheChat = async (messagesToCache) => {
+  //prevent app from crashing if AsyncStrage fails
+  try {
+    //objects and arrays need to be stored as strings in AsyncStorage
+    await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const loadCachedMessages = async () => {
+  // || and [] will assign empty array to cachedMessages
+  const cachedMessages = (await AsyncStorage.getItem('messages')) || [];
+  setMessages(JSON.parse(cachedMessages));
+}
+
+//callback function. previous and new messages on chat
+const onSend = (newMessage) => {
+  addDoc(collection(db, "messages"), newMessage[0]);
+};
+
+//removes tool bar when connection is lost 
+const renderInputToolbar = (props) => {
+  if (isConnected) { 
+    return <InputToolbar {...props} />;
+  } else {
+    return null;
+  }
+};
+
+  
 
   //color for chat bubbles
   const renderBubble = (props) => {
@@ -53,7 +96,7 @@ const Chat = ({ route, navigation, db }) => {
           },
         }}
       />
-    );
+    );  
   };
 
   //text color for date
@@ -68,30 +111,34 @@ const Chat = ({ route, navigation, db }) => {
     );
   };
 
+
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
       <GiftedChat
         messages={messages}
         renderBubble={renderBubble}
+        renderInputToolbar={renderInputToolbar}
         onSend={(messages) => onSend(messages)}
         user={{
           _id: userID,
         }}
-        renderDay={renderDay}
+        renderDay={renderDay} 
       />
-      {/*incase keyboard hides input message */}
-      {Platform.OS === "android" ? (
-        <KeyboardAvoidingView behavior="height" />
+      {Platform.OS === 'ios' ? (
+        <KeyboardAvoidingView behavior='height' />
       ) : null}
+
     </View>
   );
-};
-
+      }
+      
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     color: "#FFF",
   },
 });
+
+
 
 export default Chat;
