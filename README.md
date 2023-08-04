@@ -17,4 +17,22 @@
 - Firebase Cloud Storage
 - Gifted Chat Library
 
-# Link
+# Getting Started
+Tech Stack:
+React Native
+React Native Gifted Chat
+Expo
+Firebase and Firestore 
+ - Firebase Authentication for anonymous sign-in
+ - Firestore Database for storing messages
+ - Firebase Storage for storing images
+
+# Setting up the Environment 
+Install the Expo CLI - npm install expo-cli -g 
+expo login
+npm install
+Install the Expo Go App on your mobile device.
+Create your test environment (Android Emulator or iOS Simulator)
+Start project in the terminal - npm expo start or expo start 
+
+
