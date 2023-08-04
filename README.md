@@ -22,10 +22,8 @@ Tech Stack:
 React Native
 React Native Gifted Chat
 Expo
-Firebase and Firestore 
- - Firebase Authentication for anonymous sign-in
- - Firestore Database for storing messages
- - Firebase Storage for storing images
+Firebase (Firebase Authentication for anonymous sign-in, Firebase Storage for storing images)
+Firestore (Firestore Database for storing messages)
 
 # Setting up the Environment 
 Install the Expo CLI - npm install expo-cli -g 
