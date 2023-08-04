@@ -12,18 +12,10 @@
 # Languages, Libraries, Frameworks and Tools
 - React Native
 - Expo
-- Google Firestore Database
-- Google Firebase authentication
+- Google Firestore Database (Firestore Database for storing messages)
+- Google Firebase authentication  (Firebase Authentication for anonymous sign-in, Firebase Storage for storing images)
 - Firebase Cloud Storage
 - Gifted Chat Library
-
-# Getting Started
-Tech Stack:
-React Native
-React Native Gifted Chat
-Expo
-Firebase (Firebase Authentication for anonymous sign-in, Firebase Storage for storing images)
-Firestore (Firestore Database for storing messages)
 
 # Setting up the Environment 
 Install the Expo CLI - npm install expo-cli -g 
