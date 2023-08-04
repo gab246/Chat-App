@@ -18,11 +18,11 @@
 - Gifted Chat Library
 
 # Setting up the Environment 
-Install the Expo CLI - npm install expo-cli -g 
-expo login
-npm install
-Install the Expo Go App on your mobile device.
-Create your test environment (Android Emulator or iOS Simulator)
-Start project in the terminal - npm expo start or expo start 
+1. Install the Expo CLI - npm install expo-cli -g
+2. expo login
+3. npm install
+4. Install the Expo Go App on your mobile device.
+5. Create your test environment (Android Emulator or iOS Simulator)
+6. Start project in the terminal - npm expo start or expo start 
 
 
