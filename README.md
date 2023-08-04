@@ -1,5 +1,7 @@
 # Chat App
 
+<img src=img/image1.PNG width=300><img src=img/image3.PNG width=300><img src=img/image2.PNG width=300>
+
 # Overview
   The purpose of this task is to build a native chat app for mobile devices using React Native. Users will be provided with a chat interface and have the option to share their location and images.
 
