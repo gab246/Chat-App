@@ -2,7 +2,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Start from "./components/Start"
+import Start from './components/Start';
 
 //create navigator
 const Stack = createNativeStackNavigator();
@@ -14,6 +14,7 @@ import Chat from './components/Chat';
 //determines whether a user is online or not
 import { useNetInfo }from '@react-native-community/netinfo';
 import { useEffect } from 'react';
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -30,6 +31,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 //initialises Cloud Firestire, gets reference to service
 const db = getFirestore(app);
+//storage location reference for blob(collection of data). Initialises firebase sotrage handler 
+const storage = getStorage(app);
 
 const App = () => {
   const connectionStatus = useNetInfo();
@@ -56,7 +59,11 @@ const App = () => {
         <Stack.Screen
         name='Chat'
         >
-        {props => <Chat isConnected={connectionStatus.isConnected} db={db} {...props} />}
+        {props => <Chat 
+          isConnected={connectionStatus.isConnected} 
+          db={db} 
+          storage={storage}
+          {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
